@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>소셜 로그인</title>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center h-screen">
+<div class="w-full max-w-xs space-y-4">
+    <!-- Google 로그인 -->
+    <a href="/oauth2/authorization/google"
+       class="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 rounded-2xl shadow hover:bg-gray-100 transition">
+        <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-6 h-6 mr-3" alt="Google" />
+        <span class="font-medium text-gray-700">Google로 로그인</span>
+    </a>
+
+    <!-- Kakao 로그인 -->
+    <a href="/oauth2/authorization/kakao"
+       class="flex items-center justify-center px-4 py-3 bg-yellow-300 rounded-2xl shadow hover:bg-yellow-400 transition">
+        <img src="https://www.svgrepo.com/show/448241/kakao.svg" class="w-6 h-6 mr-3 bg-white rounded-full" alt="Kakao" />
+        <span class="font-medium text-gray-900">Kakao로 로그인</span>
+    </a>
+
+    <!-- Naver 로그인 -->
+    <a href="/oauth2/authorization/naver"
+       class="flex items-center justify-center px-4 py-3 bg-green-500 rounded-2xl shadow hover:bg-green-600 transition">
+        <img src="https://www.svgrepo.com/show/374184/naver.svg" class="w-6 h-6 mr-3 bg-white rounded-full" alt="Naver" />
+        <span class="font-medium text-white">Naver로 로그인</span>
+    </a>
+</div>
+</body>
+</html>
