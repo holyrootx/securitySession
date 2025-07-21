@@ -1,5 +1,7 @@
 package com.jsj.socialLoginSession.oauth;
 
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+
 import java.util.Map;
 
 public interface OAuth2UserInfoFactory {
@@ -18,4 +20,16 @@ public interface OAuth2UserInfoFactory {
      * @return OAuth2UserInfo 실제로는 각 서비스의 XxxXUserInfo 객체를 반환
      */
     OAuth2UserInfo create(Map<String, Object> attributes);
+    default OAuth2UserInfo create(Map<String, Object> attributes,String registrationId){
+        if ("kakao".equals(registrationId)){
+            return new KakaoUserInfo(attributes);
+        } else if ("google".equals(registrationId)){
+            return new GoogleUserInfo(attributes);
+        } else if ("naver".equals(registrationId)){
+            return new NaverUserInfo(attributes);
+        } else {
+            throw new OAuth2AuthenticationException("Unsupported provider: " + registrationId);
+        }
+    }
+
 }

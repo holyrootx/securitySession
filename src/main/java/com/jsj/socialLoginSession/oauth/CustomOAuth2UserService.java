@@ -1,7 +1,9 @@
 package com.jsj.socialLoginSession.oauth;
 
+import com.jsj.socialLoginSession.dto.request.OAuthJoinRequest;
+import com.jsj.socialLoginSession.entity.Member;
+import com.jsj.socialLoginSession.repository.MemberRepository;
 import com.jsj.socialLoginSession.util.Role;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,12 +15,11 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Spring Security의 oauth2Login() 설정에서 userInfoEndpoint().userService(...)
@@ -30,6 +31,7 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final List<OAuth2UserInfoFactory> userInfoFactories;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,20 +51,24 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     );
 
             OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser(userRequest);
-            Map<String, Object> attributes = oauth2User.getAttributes();
-            OAuth2UserInfo oAuth2UserInfo = factory.create(attributes);
 
-            log.info("🍘 CustomOAuth2UserService.loadUser oAuth2UserInfo.getAttributes() : {}",oAuth2UserInfo.getAttributes());
-            log.info("🍘 CustomOAuth2UserService.loadUser oAuth2UserInfo.getName() : {}",oAuth2UserInfo.getName());
-            log.info("🍘 CustomOAuth2UserService.loadUser oAuth2UserInfo.getEmail() : {}",oAuth2UserInfo.getEmail());
-            log.info("🍘 CustomOAuth2UserService.loadUser oAuth2UserInfo.getProviderId() : {}",oAuth2UserInfo.getProviderId());
-            log.info("🍘 CustomOAuth2UserService.loadUser oAuth2UserInfo.getProvider() : {}",oAuth2UserInfo.getProvider());
-            email = oAuth2UserInfo.getEmail();
+            OAuth2UserInfo oAuth2UserInfo = factory.create(oauth2User.getAttributes());
+
+            Optional<Member> check = memberRepository.findByProviderAndProviderId(oAuth2UserInfo.getProvider(), oAuth2UserInfo.getProviderId());
+
+            OAuthJoinRequest oAuthJoinRequest = new OAuthJoinRequest(oAuth2UserInfo);
+
+
+
+            if (check.isEmpty()){
+                Member member = oAuthJoinRequest.RequestToEntity();
+                memberRepository.save(member);
+            }
+
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
             grantedAuthorities.add(new SimpleGrantedAuthority(Role.ROLE_MEMBER.name()));
 
-            return new DefaultOAuth2User(grantedAuthorities, oAuth2UserInfo.getAttributes(),oAuth2UserInfo.getProviderIdKey());
-
+            return new DefaultOAuth2User(grantedAuthorities, oAuth2UserInfo.getAttributes(), oAuth2UserInfo.getProviderIdKey());
 
         } catch (Exception e) {
 

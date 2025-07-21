@@ -17,7 +17,6 @@ public class ApiResponse<U> {
     private String code;
     private String message;
     private U data;
-    private String fieldName;   // 유효성검사를 위한필드네임
 
     public <T extends Enum<T> & StatusCode> ApiResponse(StatusCode statusCode) {
         this.name = statusCode.Name();
@@ -31,13 +30,6 @@ public class ApiResponse<U> {
         this.data = data;
     }
 
-    public <T extends Enum<T> & StatusCode> ApiResponse(StatusCode statusCode, String fieldName, U data) {
-        this.name    = statusCode.Name();
-        this.code    = statusCode.getCode();
-        this.message = statusCode.getMessage();
-        this.fieldName = fieldName;
-        this.data    = data;
-    }
     // ✨ 새로 추가될 메서드를 여기에 넣으시면 됩니다.
     public static <T, V extends Enum<V> & StatusCode> ApiResponse<T> success(V statusCode, String message, T data) {
         ApiResponse<T> apiResponse = new ApiResponse<>(statusCode, data);

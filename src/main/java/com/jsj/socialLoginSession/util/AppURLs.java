@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class AppURLs {
 
     /**
-     * Security, JwtAuthenticationFilter에서 사용
+     * Security에서 사용
      */
     public static final String[] PUBLIC_URLS = {
             // TODO: 인증 자체가 필요 없는 url을 정확하게 작성
@@ -20,8 +20,14 @@ public class AppURLs {
             "/auth/loginForm",
             "/auth/joinForm",
             "/auth/login",
-            "/auth/join"
+            "/auth/join",
+            "/auth/joinExtra",
+            "/auth/validate/extra",
+            "/auth/logout",
+            "/favicon.ico",
+            "/firebase-messaging-sw.js"
     };
+
 
     /**
      * 정적 리소스(prefix) 화이트리스트 URL

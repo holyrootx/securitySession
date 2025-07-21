@@ -2,22 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>메인 페이지</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <title>메인 페이지</title>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
 <div class="bg-white shadow-lg rounded-2xl p-10 w-full max-w-md text-center">
     <h1 class="text-3xl font-bold mb-8 text-gray-800">Welcome!</h1>
     <div class="space-y-4">
         <a th:href="@{/auth/loginForm}"
-           class="block w-full py-3 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold transition">
+            class="block w-full py-3 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold transition">
             로그인
         </a>
         <a th:href="@{/auth/joinForm}"
-           class="block w-full py-3 px-6 rounded-xl bg-green-500 hover:bg-green-600 text-white text-lg font-semibold transition">
+            class="block w-full py-3 px-6 rounded-xl bg-green-500 hover:bg-green-600 text-white text-lg font-semibold transition">
             회원가입
         </a>
+        <button id="logoutBtn"
+            class="block w-full py-3 px-6 rounded-xl bg-green-500 hover:bg-green-600 text-white text-lg font-semibold transition">
+            로그아웃
+        </button>
     </div>
 </div>
+<script>
+    const logoutBtn = document.getElementById("logoutBtn");
+
+
+    logoutBtn.addEventListener("click", async () => {
+
+        const res = await fetch("/auth/logout",{
+            method : "POST",
+            "Accept": "application/json"
+
+        });
+
+        if (res.ok) {
+        // 로그아웃 성공 시 원하는 동작 (예: 메인페이지로 리다이렉트)
+        window.location.href = "/";
+        } else {
+        console.error("로그아웃 실패", await res.text());
+        }
+
+
+    });
+
+</script>
 </body>
 </html>

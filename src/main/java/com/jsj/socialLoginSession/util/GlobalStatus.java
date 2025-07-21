@@ -9,6 +9,7 @@ public enum GlobalStatus implements StatusCode{
     ACCEPTED("AC", "요청이 접수되었으며 비동기적으로 처리됩니다"),
     NO_CONTENT("NC", "요청이 성공했으나 반환할 데이터가 없습니다"),
     SUCCESS_WITH_DATA("SWD", "데이터를 정상적으로 반환하였습니다"),
+    LOGOUT_SUCCESS("LS","로그아웃을 성공적으로 진행하였습니다."),
 
     VALIDATION_FAIL("VF", "입력값 검증 실패"),
     TYPE_MISMATCH("TM", "입력 타입 불일치"),

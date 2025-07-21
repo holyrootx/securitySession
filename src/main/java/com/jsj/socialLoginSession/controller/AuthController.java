@@ -1,8 +1,10 @@
 package com.jsj.socialLoginSession.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -10,12 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Log4j2
 public class AuthController {
 
-
-    @GetMapping({"/main","/"})
-    public String showMainPage(){
-
-        return "/main";
-    }
 
     @GetMapping("/auth/loginForm")
     public String showLoginForm(){
@@ -28,4 +24,13 @@ public class AuthController {
 
         return "/auth/joinForm";
     }
+
+    @GetMapping("/auth/joinExtra")
+    public String showJoinExtra(HttpServletRequest request, Model model){
+        model.addAttribute("email",request.getSession().getAttribute("email"));
+        model.addAttribute("name",request.getSession().getAttribute("name"));
+        return "/auth/joinExtra";
+    }
+
+
 }
